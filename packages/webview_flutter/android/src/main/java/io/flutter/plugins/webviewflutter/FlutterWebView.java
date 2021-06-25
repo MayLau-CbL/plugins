@@ -17,6 +17,8 @@ import android.webkit.WebStorage;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import androidx.annotation.NonNull;
+import androidx.webkit.WebSettingsCompat;
+import androidx.webkit.WebViewFeature;
 import io.flutter.plugin.common.BinaryMessenger;
 import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
@@ -97,6 +99,11 @@ public class FlutterWebView implements PlatformView, MethodCallHandler {
 
     // Multi windows is set with FlutterWebChromeClient by default to handle internal bug: b/159892679.
     webView.getSettings().setSupportMultipleWindows(true);
+
+    if(WebViewFeature.isFeatureSupported(WebViewFeature.FORCE_DARK)) {
+      WebSettingsCompat.setForceDark(webView.getSettings(), WebSettingsCompat.FORCE_DARK_OFF);
+    }
+
     webView.setWebChromeClient(new FlutterWebChromeClient());
 
     methodChannel = new MethodChannel(messenger, "plugins.flutter.io/webview_" + id);
